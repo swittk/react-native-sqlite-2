@@ -1,5 +1,5 @@
 {
-  "name": "react-native-sqlite-2",
+  "name": "@switt/react-native-sqlite-2",
   "version": "3.5.2",
   "description": "SQLite3 Native Plugin for React Native for iOS, Android, Windows and macOS",
   "main": "lib/commonjs/index",
