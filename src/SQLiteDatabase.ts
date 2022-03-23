@@ -1,8 +1,8 @@
 import map from 'lodash.map'
 import SQLiteResult from './SQLiteResult'
 import zipObject from 'lodash.zipobject'
-import {NativeModules, Platform} from 'react-native'
-const {RNSqlite2} = NativeModules
+import { NativeModules, Platform } from 'react-native'
+const { RNSqlite2 } = NativeModules
 
 const os = Platform.OS
 
@@ -34,7 +34,7 @@ function dearrayifyRow(res: Array<any>) {
 }
 
 // send less data over the wire, use an array
-function arrayifyQuery(query: {sql: string; args: Array<any>}) {
+function arrayifyQuery(query: { sql: string; args: Array<any> }) {
   return [query.sql, escapeMacIOSAndroid(query.args || [])]
 }
 
@@ -113,3 +113,16 @@ class SQLiteDatabase {
 }
 
 export default SQLiteDatabase
+
+
+type SQLite2ConfigureOptions = {
+  /** (iOS) The database search path directory (default is application support directory) */
+  databaseSearchPathDirectory?: 'document' | 'applicationSupport'
+}
+/**
+ * Configuration.
+ * @param options 
+ */
+export function configure(options: SQLite2ConfigureOptions = {}) {
+  RNSqlite2.configure(options);
+}

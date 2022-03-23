@@ -8,6 +8,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.module.annotations.ReactModule;
@@ -118,6 +119,11 @@ public class RNSqlite2Module extends ReactContextBaseJavaModule {
         }
       }
     });
+  }
+
+  @ReactMethod
+  public void configure(final ReadableMap options) {
+    // Nothing yet
   }
 
   // do a update/delete/insert operation
