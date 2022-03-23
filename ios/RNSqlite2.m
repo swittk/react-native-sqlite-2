@@ -1,7 +1,9 @@
 #import "RNSqlite2.h"
 #import "sqlite3.h"
 
-@implementation RNSqlite2
+@implementation RNSqlite2 {
+    NSSearchPathDirectory searchPathDirectory;
+}
 
 @synthesize cachedDatabases;
 @synthesize dbQueues;
@@ -27,6 +29,7 @@ RCT_EXPORT_MODULE()
 
 -(void)pluginInitialize {
   logDebug(@"pluginInitialize()");
+  searchPathDirectory = NSApplicationSupportDirectory;
   cachedDatabases = [NSMutableDictionary dictionaryWithCapacity:0];
   dbQueues = [NSMutableDictionary dictionaryWithCapacity:0];
   NSString *dbDir = [self getDatabaseDir];
@@ -49,7 +52,7 @@ RCT_EXPORT_MODULE()
 
 -(NSString*) getDatabaseDir {
   NSString *appSupportDir = nil;
-  appSupportDir = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex: 0];
+  appSupportDir = [NSSearchPathForDirectoriesInDomains(searchPathDirectory, NSUserDomainMask, YES) objectAtIndex: 0];
   NSString *appBundleID = [[NSBundle mainBundle] bundleIdentifier];
   return [NSString stringWithFormat:@"%@/%@", appSupportDir, appBundleID];
 }
@@ -119,6 +122,18 @@ RCT_EXPORT_METHOD(exec:(NSString *)dbName
 
     resolve(sqlResults);
   });
+}
+RCT_EXPORT_METHOD(configure:(NSDictionary *)options) {
+    logDebug(@"configure(), %@", options);
+    NSString *databaseSearchPathDirectory = options[@"databaseSearchPathDirectory"];
+    if(databaseSearchPathDirectory) {
+        if([databaseSearchPathDirectory isEqualToString:@"document"]) {
+            searchPathDirectory = NSDocumentDirectory;
+        }
+        else {
+            searchPathDirectory = NSApplicationSupportDirectory;
+        }
+    }
 }
 
 -(NSObject*) getSqlValueForColumnType: (int)columnType withStatement: (sqlite3_stmt*)statement withIndex: (int)i {
